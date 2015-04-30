@@ -1,0 +1,99 @@
+package zhaogong;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Record;
+
+import zhaogong.zhaogb;
+
+public class zhaogbControllor extends Controller {
+	public static List<Record> migrant=null;   //用户注册信息，便于使用注册用户id
+	public void index() { 
+		renderText("welcome to zhaogongbao.");
+		//redirect("/reg.html");
+		//redirect("/zhaogb.html");
+		redirect("/reg.html");
+		}
+	
+	//获取父职位名称
+	public void getItem(){
+		List<Record> fatherItem=getModel(zhaogb.class).findItem();
+		renderJson(fatherItem);		
+	}
+	
+	//获取子职位名称
+	public void getItemChild(){
+		//Integer fatherId=getParaToInt("id");
+		//System.out.println(fatherId);
+		String fatherName=getPara("name");
+		List<Record> childItem=getModel(zhaogb.class).findChildItem(fatherName);
+		renderJson(childItem);		
+	}
+	
+	//存储用户信息
+	public void saveMessage(){
+		java.util.Date date = new java.util.Date();  //获取系统当前日期
+		//System.out.println(date);
+		String name=getPara("name");
+		Integer sex=getParaToInt("sex");
+		Integer age=getParaToInt("age");
+		Integer salary=getParaToInt("salary");
+		String itemName=getPara("itemName");
+		String phone=getPara("phone");
+		//在用户发布时，查询出用户注册信息，通过migrant[migrant.length-1].id得到注册用户的id
+	    migrant=getModel(zhaogb.class).saveUserMessage(date,name,sex,age,salary,itemName,phone);
+		//setAttr("migrantId",migrant);
+		renderText("发布信息成功");	
+		
+	}
+	
+	//根据用户选的条件显示合适的工作
+	public void showJob(){
+		Integer salary=getParaToInt("salary");
+		Integer itemId=getParaToInt("itemId");
+		List<Record> Job=getModel(zhaogb.class).findJob(salary,itemId);	
+		renderJson(Job);
+	}
+	//获取公司的信息
+	public void getCompany(){
+		Integer companyId=getParaToInt("companyId"); //获取公司Id
+		Record company=getModel(zhaogb.class).findCompany(companyId);
+		renderJson(company);		
+	}
+	
+	//岗位详情
+	public void getStationInfor(){
+		Integer stationId=getParaToInt("id");
+		Record stationInfor=getModel(zhaogb.class).findStation(stationId);
+		renderJson(stationInfor);
+		
+	}
+	
+	//公司详情
+//	public void getCompanyInfor(){
+//		Integer companyId=getParaToInt("companyId");
+//		Record companyInfor=getModel(zhaogb.class).findCompanyInfor(companyId);
+//		renderJson(companyInfor);
+//		
+//		
+//	}
+	
+	//将申请岗位信息放到apply表中
+	public void saveApply(){
+		Integer migrantId=getParaToInt("migrantId");
+		Integer stationId=getParaToInt("stationId");
+		getModel(zhaogb.class).saveApplyInfor(migrantId,stationId);
+		renderText("申请岗位成功，请等候通知");		
+	}
+	
+	public void getMigrantId() {
+		//将用户发布信息时得到的全局变量migrant渲染到岗位详情页面
+		renderJson(migrant);		//将setAttr的migrantId渲染到前台
+		
+	}
+	
+}
