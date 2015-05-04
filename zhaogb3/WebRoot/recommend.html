@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Ratchet template page</title>
+
+		<!-- Sets initial viewport load and disables zooming  -->
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+		<!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- Include the compiled Ratchet CSS -->
+		<link href="dist/css/ratchet.css" rel="stylesheet">
+
+		<!-- Include the compiled Ratchet JS -->
+		<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+		<script src="dist/js/ratchet.js"></script>
+		<script type="text/javascript" src="js/recommend.js"></script>
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="dist/css/ratchet.min.css" />
+		<link rel="stylesheet" href="css/docs.min.css">
+	</head>
+
+	<body>
+		<div class="recommend">
+			<div class="rec-top">
+				<div class="title-recommend">
+				<a href="index.html"> <span class="icon icon-left-nav irec"></span></a>	
+					<div class="media-body">推荐工作</div>
+				</div>
+				<div class="title-titlebar">
+					<div class="t rec-area">
+						区域
+						<span class="icon icon-caret"></span>
+					</div>
+					<div class="t rec-salary">
+						工资
+						<span class="icon icon-caret"></span>
+					</div>
+					<div class="t rec-job">
+						职位
+						<span class="icon icon-caret"></span>
+					</div>
+					<div class="t rec-other">
+						其他
+						<span class="icon icon-caret"></span>
+					</div>
+				</div>
+			</div>
+			<ul class="items">
+			</ul>
+		</div>
+		<div class="salary-bg"></div>
+		<div class="popover-salary">
+			<header class="bar bar-nav">
+				<h1 class="title">工资</h1>
+			</header>
+			<ul class="table-view salary-select">
+			</ul>
+		</div>
+		<div class="recommend-job">
+			<header class="bar bar-nav">
+				<span class="icon icon-close ijob"></span>
+				<h1 class="title title-job">选择岗位</h1>
+			</header>
+			<div class="job-father">
+				<ul class="table-view job-father-ul">
+				</ul>
+			</div>
+			<div class="job-child">
+				<ul class="table-view job-child-ul">
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>
