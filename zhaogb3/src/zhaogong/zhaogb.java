@@ -43,7 +43,7 @@ public class zhaogb extends Model<zhaogb> {
 		Db. save("migrant", user);
 		
 		//查询刚发布信息用户的id
-		List<Record> migrantIdList=Db.find("select * from migrant");
+		List<Record> migrantIdList=Db.find("select * from migrant");  //sql语句，待优化，不必查询所有的项
 		return migrantIdList;
 	}
 	

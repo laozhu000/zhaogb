@@ -37,6 +37,7 @@ $(function() {
 	
 	var companyInfor;  //公司信息
 	var station;     //岗位情况
+	var wealString=""; //公司福利
 	var num=0;    //岗位下标
 	var condition={   //条件，为0表示没选该条件
 		    "salary":0,
@@ -60,18 +61,19 @@ $(function() {
 	}, {
 		"salary": "面议"
 	}]
-	var weals = [{
+	
+	/*var weals = [{
 		"weal": "有厂车"
 	}, {
 		"weal": "包吃"
 	}, {
 		"weal": "包住"
-	}]
+	}]*/
 
 	$(document).ready(function() {
 		//creat_part();
-		getStation();  //加载岗位
-		creat_tip(weals);
+		getStation();  //加载岗位 ,ajax是异步的
+		//creat_tip(weals);
 		//点击工资泡沫弹框
 		$(".t.rec-salary").click(function() {
 			$(".salary-bg").show();
@@ -94,6 +96,9 @@ $(function() {
 		});
 		//点击职位弹出框
 		$(".t.rec-job").click(function() {
+			$(".recommend").hide();
+			$(".salary-bg").hide();
+			$(".popover-salary").hide();
 			$(".rec-top").hide();
 			$(".recommend-job").show();
 			$(".table-view.job-father-ul").empty();
@@ -118,6 +123,7 @@ $(function() {
 		
 		//子职业的点击事件
 		$(".table-view.job-child-ul").on('click', 'li', function() {
+			$(".recommend").show();
 			$(".rec-top").show();
 			$(".recommend-job").hide();
 			condition.itemId=$(this).attr('value');
@@ -167,7 +173,7 @@ $(function() {
             }
          
          });		
-	}	
+	}		
 	
 	//获取父职业
 	function getFatherItem(){
@@ -214,9 +220,12 @@ $(function() {
 		
 	}
 	//生成岗位信息   
-	function creat_part() {
+	function creat_part(){
 		   $(".items").empty();
-			for (var i = 0; i < station.length; i++) {
+			for (var i = 0; i <station.length; i++) {		
+				//$(".weals-ul").empty();
+				//alert('hi');
+				creat_tip(station[i].weal);
 				getCompany(station[i].companyId);  //根据companyId获取公司信息  
 				var html = "<div class='rec-part'>" +
 					"<ul class='rec-ul'>" +
@@ -226,7 +235,7 @@ $(function() {
 					"<li class='table-view-cell'>" +
 					"<div class='part p2'>" + companyInfor.name + "</div></li>" +
 					"<li class='table-view-cell tips'>" +
-					"<ul class='weals-ul'>"+
+					"<ul class='weals-ul'>"+ wealString+
 					"</ul></li>" +
 					"<li class='table-view-cell'>" +
 					"<img src='img/img5.png' height='17px' width='14px' class='image5'>" +
@@ -236,13 +245,25 @@ $(function() {
 					"	<div class='part pt5'>评论<span class='number'>7条</span></div>" +
 					"<div class='btn-ne'><a href='javascript:;' value="+i+">申请岗位</a></div></li></ul>";
 				$(".items").append("<li>" + html + "</li>");
+				//$(".weals-ul").empty();
+				//creat_tip(station[i].weal);
 			}
 		}
 	
 	//生成福利图标
-	function creat_tip(weals){
-		for(var n=0;n<weals.length;n++){
-			$(".weals-ul").append("<li><span class='tip'>"+weals[n].weal+"</span></li>");		
+	function creat_tip(weals){   //若有weal为null时，则无法显示出来   待做？？
+		//alert('hi');
+		wealString="";
+		if(weals!=null){
+			//alert('hi');
+		var str=weals.split(',');
+		//alert(str[0]);
+		for(var n=0;n<str.length;n++){
+			//alert('hi');
+			//alert('hihi');
+			//$(".weals-ul").append("<li><span class='tip'>"+str[n]+"</span></li>");
+			wealString+="<li><span class='tip'>"+str[n]+"</span></li>";
+		}
 		}
 	}
 		//生成选择岗位父节点
@@ -262,7 +283,7 @@ $(function() {
 	   $(document).on('click','a',function(){   //为document 的a href 绑定click事件
 	     num=$(this).attr('value');   //num为申请岗位的id
 	    // showStationInfor();
-	     window.location.href='work.html?id='+station[num].id+'';
+	     window.location.href='details.html?id='+station[num].id+'';
 	
     })
 });

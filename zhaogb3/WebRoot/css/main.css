@@ -11,7 +11,6 @@ body {}
 }
 .reg-title {
 	padding: 0;
-	margin: 0 -10px;
 	font-size: 17px;
 	font-weight: 500;
 	line-height: 44px;
@@ -384,6 +383,9 @@ body {}
 	width: 60%;
 	max-height: 80%;
 }
+.table-view.job-child-ul{
+	overflow-y:scroll;
+}
 .table-view.job-child-ul li {
 	padding: 11px 0px 11px 15px;
 }
@@ -394,6 +396,9 @@ body {}
 }
 .title-job {
 	background: #FFDC35;
+}
+.table-view.job-father-ul{
+	overflow-y:scroll;
 }
 .table-view.job-father-ul li.on {
 	background: #FFF;
@@ -412,22 +417,34 @@ body {}
 /*details*/
 
 .details {
-	position: fixed;
 	width: 100%;
 	height: 100%;
 }
 .title-details {
+	position: fixed;
 	padding: 0;
+	top: 0px;
+	left: 0px;
+	width: 100%;
 	font-size: 17px;
 	font-weight: 500;
+	height: 44px;
 	line-height: 44px;
 	color: #000;
 	background: #FFDC35;
 	white-space: nowrap;
+	z-index:1;
 }
 .segmented-control.seg1 {
+	position: fixed;
+	top: 44px;
+	left: 0px;
+	width: 100%;
+	height: 42px;
 	border-radius: 0px;
 	border: none;
+	z-index:1;
+	border-bottom: 1px solid #CCCCCC;
 }
 .item1,
 .item2 {
@@ -453,6 +470,7 @@ body {}
 }
 .det-body {
 	position: absolute;
+	top: 86px;
 	width: 100%;
 	height: 100%;
 }
@@ -554,7 +572,7 @@ body {}
 }
 .table-view-cell.det-ba{
 	border: none;
-	padding: 5px 5px 5px 15px;
+	padding: 5px 5px 5px 0px;
 }
 .det-com.part1-com{
 	display: inline-block;
@@ -618,40 +636,21 @@ body {}
 .det-com.part-com{
 	margin: -5px -5px -5px -15px;
 	padding-left:15px;
-	background: #E1E1E1;
+	background: #FFFFCC;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.btn-top{
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	height:44px;
+	width: 100%;
+	border-top: 1px solid #FFDC35;
+	padding: 5px;
+	background:#FFFFCC ;
+}
+.btn-ne.ne2{
+  	text-align: center;
+}
 
 
 

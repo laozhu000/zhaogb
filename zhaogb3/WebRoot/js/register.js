@@ -192,7 +192,7 @@ $(function() {
             dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
             success:function(itemFather){  
             	for(var i=0;i<itemFather.length;i++){
-            		var count = 'item' + i;
+            		var count = 'items' + i;
             		$(".father-ul").append("<li class='" + count + "'>" + itemFather[i].name + "</li>");
             	}
             },
@@ -221,6 +221,11 @@ $(function() {
             }         
          });     	
     }
+    
+    //推荐岗位的点击事件，页面跳转到recommend.html
+    $(".tuijian").click(function(){
+       window.location.href='recommend.html';
+    })
     
 	//验证手机号码格式
 	$(".text-phone").blur(function(){	 
