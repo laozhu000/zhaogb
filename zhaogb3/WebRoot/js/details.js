@@ -2,7 +2,10 @@ $(function() {
 	
 	var migrantId;   //发布信息的用户id
 	var stationInfor;//岗位信息
-	var compnayInfor;//公司信息
+	var otherStation;//该公司的其它岗位
+	var companyInfor;//公司信息
+	var areaInfor;   //地区信息
+	var parentInfor=new Array(5);//父地区
 	var id;          //岗位的id
 	var wealString="";  //公司待遇
 	
@@ -18,6 +21,8 @@ $(function() {
 		"age": "41-45"
 	}, {
 		"age": "45以上"
+	}, {
+		"age": "无要求"
 	}]
 	var types = [{
 		"type": "全职"
@@ -25,6 +30,8 @@ $(function() {
 		"type": "兼职"
 	}, {
 		"type": "实习"
+	},{
+		"type":""
 	}]
 	var experiences = [{
 		"experience": "无经验"
@@ -72,6 +79,8 @@ $(function() {
 		"workShift": "两班倒"
 	}, {
 		"workShift": "三班倒"
+	},{
+		"workShift":"暂无"
 	}]
 	var wages = [{
 		"salary": "1500以下"
@@ -104,6 +113,8 @@ $(function() {
 		"nature": "中外合资企业"
 	}, {
 		"nature": "外商投资企业"
+	},{
+		"nature":"暂无介绍"
 	}]
 	var scales = [{
 		"scale": "20人以下"
@@ -117,6 +128,8 @@ $(function() {
 		"scale": "1000-9999人"
 	}, {
 		"scale": "10000人以上"
+	},{
+		"scale":"暂无介绍"
 	}]
 	var weals = [{
 		"weal": "五险一金"
@@ -129,17 +142,25 @@ $(function() {
 	}]
 	$(document).ready(function() {
 		
-		getMigrantId(); //获取发布信息的用户id
+		//getMigrantId(); //获取发布信息的用户id  测试时先注掉
 		
-		id = getUrlParam('id');  //获取url的id参数值
-		
+		id = getUrlParam('id');  //获取url的id参数值		
 		getStation();//获取岗位详情
 		getCompany();//获取公司详情
-		
+		if(stationInfor.areaId!=null){
+		getArea();//获取地区
+		getParentArea();//获取父地区
+		}
+		getOtherStation() //获取公司的其它岗位
+		checkNull();  //判断岗位和公司信息是否为null
 		creat_job();  //显示岗位信息
 		creat_company()  //显示公司信息
-		//creat_weals(weals)
-		
+		creat_otherjob(); //显示公司其它的岗位信息
+		//返回图标的点击事件，返回岗位详情页面
+		$(".back").click(function(){
+			window.location.href='recommend.html';
+			
+		})
 		//点击岗位详情事件
 		$(".item1").click(function() {
 			$(this).addClass('on').siblings().removeClass('on');
@@ -187,8 +208,8 @@ $(function() {
 	
 	function getStation(){		
 		$.ajax({      //根据id向后台获取岗位详情
-			async: false,
-			type:'post',
+		   async: false,
+		   type:'post',
            url:'/zhaogb/getStationInfor',   
            data:{"id":id},   
            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
@@ -221,6 +242,17 @@ $(function() {
 	//生成岗位详情
 	function creat_job() {
 		creat_weal(stationInfor.weal);  //构造岗位待遇字符串
+		var areaStr="";//地区字符串
+		if(stationInfor.areaId==null){
+			areaStr="";
+		}
+		else if(areaInfor.level<2)
+			areaStr=areaStr+parentInfor[1].name+"|";
+		else if(areaInfor.level>=2){
+			areaStr=areaStr+parentInfor[1].name+"-"+parentInfor[2].name+"|";
+		}
+		//alert(areaStr);
+		//alert(areaInfor.level);
 		var html1 =
 			"<ul class='table-view'>" +
 			"<li class='table-view-cell det-li'>" +
@@ -228,9 +260,9 @@ $(function() {
 			"<li class='table-view-cell det-li li3'>" +
 			"	<div class=''>" + companyInfor.name + "</div></li>" +
 			"<li class='table-view-cell det-li li3'>" +
-			"	<div class=''>无锡-北塘区|全职</div></li>" +
+			"	<div class='det3-aprt aprt1'>"+areaStr+types[stationInfor.type-1].type+"</div><div class='det3-aprt aprt2'>截止："+stationInfor.endTime+"</div></li>" +
 			"	<li class='table-view-cell det-li2'>" +
-			"<div class='det4-aprt'>年龄范围<span class='det4-s'>" + ages[stationInfor.age - 1].age + "岁</span></div>" +
+			"<div class='det4-aprt'>年龄范围<span class='det4-s'>" +ages[stationInfor.age-1].age+ "岁</span></div>" +
 			"		<div class='det4-aprt aprt4'>招聘人数<span class='det4-s'>"+stationInfor.number+"人</span></div></li></ul>" +
 			"<div class='details-weal'>" +
 			"<div class='det-weal'>员工福利</div>" +
@@ -243,9 +275,9 @@ $(function() {
 			"<li class='table-view-cell det-infor'>" +
 			"<div class='table-view-cell det-infor p1'>工作经验:<span>" + experiences[stationInfor.experience - 1].experience + "</span>" +
 			"	</div>" +
-			"<div class='table-view-cell det-infor p1'>学历:<span></span>" + educations[stationInfor.education - 1].education + "</em></div></li>" +
+			"<div class='table-view-cell det-infor p1'>学历:<span>" + educations[stationInfor.education - 1].education + "</span></div></li>" +
 			"	<li class='table-view-cell det-infor area'>" +
-			"	<div class='det-infor ex'>工作地点:<span></span>工业园区</em></div>" +
+			"	<div class='det-infor ex'>工作地点:<span>工业园区</span></div>" +
 			"	<div class='image6'>" +
 			"<img src='img/img6.png' height='16px' width='14px'>查看地图</div></li>" +
 			"	<li class='table-view-cell det-infor'>" +
@@ -278,14 +310,12 @@ $(function() {
 				"<div class='det-cominfor'> " + companyInfor.introduction + "</div></li>" +
 				"<li class='table-view-cell det-com'>" +
 				"<div class='det-com part-com'>该公司其他职位</div>" +
-				"<div class='det-com part1-com1'>普工<span class='det-com part1-com'>2000-3000元</span></div>" +
-				"	<div class='det-com part2-com1'>北塘区|全职<span class='det-com part2-com'>截止2015-02-10</span></div></li></ul>";
+				"<ul class='det-com part-ul'></li></ul></ul>";
 			$(".det-company").append(html2);
 		}
-		//生成员工福利
 	
 	//生成福利图标
-	function creat_weal(weals){   //若有weal为null时，则无法显示出来   待做？？
+	function creat_weal(weals){
 		//alert('hi');
 		wealString="";
 		if(weals!=null){
@@ -307,7 +337,8 @@ $(function() {
 //
 //	}
 	
-	 function applyItem(){   //申请岗位，将申请信息放到apply表中
+	//申请岗位，将申请信息放到apply表中
+	 function applyItem(){   
 		  var applyInfor={
 				  "migrantId":migrantId,
 				  "stationId":id
@@ -318,7 +349,7 @@ $(function() {
 	            data:applyInfor,   
 	            dataType:'text', //很重要!!!.      预期服务器返回的数据类型   
 	            success:function(data){ 
-	            	alert(data);
+	            	alert(data);	            	
 	            },
 	            error:function(){   
 	                alert("error occured!!!");   
@@ -326,6 +357,137 @@ $(function() {
 	         
 	         });		  
 	  }
-	
-	
+	 
+	 //获取该公司的其它岗位信息
+	 function getOtherStation(){
+		 $.ajax({
+			    async: false,
+			    type:'post',
+	            url:'/zhaogb/getOtherStation',   
+	            data:{"id":companyInfor.id},   
+	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+	            success:function(data){ 
+	            	//alert(data);
+	            	//alert(data[2].name);
+	            	otherStation=data;
+	            },
+	            error:function(){   
+	                alert("error occured!!!");   
+	            }	 			 
+		 });		 
+	 }
+	 
+	 //判断岗位和公司信息是否为空
+	 function checkNull(){
+		 if(stationInfor.name==null){
+			 stationInfor.name="";			 
+		 }		 
+		 if(stationInfor.salary==null){
+			 stationInfor.salary=wages.length;
+		 }
+//		 if(stationInfor.weal==null){
+//			 stationInfor.weal="";
+//		 }
+		 if(companyInfor.name==null){
+			 companyInfor.name="";
+		 }
+		 if(companyInfor.address==null){
+			 companyInfor.address="";
+		 }
+		 if(stationInfor.type==null){
+			 stationInfor.type=types.length;
+		 }
+		 if(stationInfor.workShift==null){
+			 stationInfor.workShift=workShift.length;
+		 }
+		 if(stationInfor.endTime==null){
+			 stationInfor.endTime="暂无介绍";
+		 }
+		 if(stationInfor.age==null){
+			// alert("hi");
+			 stationInfor.age=ages.length;
+		 }
+		 if(stationInfor.number==null){
+			 stationInfor.number="暂无介绍";
+		 }
+		 if(stationInfor.experience==null){
+			 stationInfor.experience=experiences.length;
+		 }
+		 if(stationInfor.education==null){
+			 stationInfor.education=educations.length;
+		 }
+		 if(stationInfor.remark==null){
+			 stationInfor.remark="";
+		 }		 
+		 if(companyInfor.scale==null){
+			 companyInfor.scale=scales.length;
+		 }
+		 if(companyInfor.nature==null){
+			 companyInfor.nature=natures.length;
+		 }
+		 if(companyInfor.introduction==null){
+			 companyInfor.introduction="";
+		 }
+		 for(var i=0;i<otherStation.length;i++){  //otherStation是一个json数组，遍历
+		 if(otherStation[i].name==null){
+			 otherStation[i].name="";
+		 }
+		 if(otherStation[i].salary==null){
+			 otherStation[i].salary=wages.length;			 
+		 }
+		 if(otherStation[i].type==null){
+			 otherStation[i].type=types.length;
+		 }
+		 if(otherStation[i].endTime==null){
+			 otherStation[i].endTime="暂无介绍";
+		 }
+		}
+	 }	 
+	 //该公司的其它岗位添加到页面中
+	 function creat_otherjob() {
+			for (var j = 0; j < otherStation.length; j++) {
+				//alert("hi");
+				$(".det-com.part-ul").append("<li><div class='det-com part1-com1'>"+otherStation[j].name+"<span class='det-com part1-com'>"+wages[otherStation[j].salary-1].salary+"</span></div><div class='det-com part2-com1'>"+types[otherStation[j].type-1].type+"<span class='det-com part2-com'>"+otherStation[j].endTime+"</span></div></li>");
+			}
+		}
+	 
+	 //根据areaId获取地区信息
+	 function getArea(){
+		 $.ajax({
+			    async: false,
+			    type:'post',
+	            url:'/zhaogb/getArea',   
+	            data:{"id":stationInfor.areaId},   
+	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+	            success:function(data){ 
+	            	//alert(data);
+	            	//alert(data[2].name);
+	            	areaInfor=data;
+	            },
+	            error:function(){   
+	                alert("error occured!!!");   
+	            }	 			 
+		 });		 
+	 }
+	 
+	 //获取父地区
+	function getParentArea(){
+		 parentInfor[areaInfor.level]=areaInfor;
+		 for(var i=areaInfor.level;i>1;i--){
+			 $.ajax({
+				    async: false,
+				    type:'post',
+		            url:'/zhaogb/getParentArea',   
+		            data:{"id":parentInfor[i].parentId},   
+		            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+		            success:function(data){ 
+		            	parentInfor[i-1]=data[0];
+		            	//alert(parentInfor[i-1].name);
+		            },
+		            error:function(){   
+		                alert("error occured!!!");   
+		            }	 			 
+			 });			 
+		 }		 
+	 }
 });

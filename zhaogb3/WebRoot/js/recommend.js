@@ -227,6 +227,7 @@ $(function() {
 				//alert('hi');
 				creat_tip(station[i].weal);
 				getCompany(station[i].companyId);  //根据companyId获取公司信息  
+				checkNull(i);
 				var html = "<div class='rec-part'>" +
 					"<ul class='rec-ul'>" +
 					"<li class='table-view-cell span1'>" +
@@ -283,7 +284,23 @@ $(function() {
 	   $(document).on('click','a',function(){   //为document 的a href 绑定click事件
 	     num=$(this).attr('value');   //num为申请岗位的id
 	    // showStationInfor();
-	     window.location.href='details.html?id='+station[num].id+'';
-	
+	     window.location.href='details.html?id='+station[num].id+'';	
     })
+    
+    
+    function checkNull(number){   //判断岗位和公司相关信息是否为null
+			 if(station[number].name==null){
+				 station[number].name="";			 
+			 }		 
+			 if(station[number].salary==null){
+				 station[number].salary=wages.length;
+			 }
+			 if(companyInfor.name==null){
+				 companyInfor.name="";
+			 }
+			 if(companyInfor.address==null){
+				 companyInfor.address="";
+			 }
+		 }	
+    
 });

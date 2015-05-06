@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Record;
+import com.sun.el.lang.FunctionMapperImpl.Function;
 
 import zhaogong.zhaogb;
 
@@ -90,10 +91,30 @@ public class zhaogbControllor extends Controller {
 		renderText("申请岗位成功，请等候通知");		
 	}
 	
+	//获取注册的用户id
 	public void getMigrantId() {
 		//将用户发布信息时得到的全局变量migrant渲染到岗位详情页面
-		renderJson(migrant);		//将setAttr的migrantId渲染到前台
-		
+		renderJson(migrant);		//将setAttr的migrantId渲染到前台		
 	}
 	
+	//根据公司id获取该公司的其它岗位
+	public void getOtherStation(){
+		Integer companyId=getParaToInt("id");
+		List<Record> otherStation=getModel(zhaogb.class).findOtherStation(companyId);
+		renderJson(otherStation);		
+	}	
+	
+	//根据areaId获取地区信息
+	public void getArea(){
+		Integer id=getParaToInt("id");
+		Record area=getModel(zhaogb.class).findArea(id);
+		renderJson(area);
+	}
+	
+	//根据area的parentId获取父地区
+	public void getParentArea(){
+		Integer idInteger=getParaToInt("id");
+		List<Record> parentArea=getModel(zhaogb.class).findParentArea(idInteger);
+		renderJson(parentArea);
+	}
 }

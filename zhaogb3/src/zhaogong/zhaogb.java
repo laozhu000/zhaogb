@@ -84,9 +84,26 @@ public class zhaogb extends Model<zhaogb> {
 //		return companyInfor;		
 //	}	
 	
+	//用户申请岗位的信息放到apply表中
 	public void saveApplyInfor(Integer migrantId,Integer stationId){
 		java.util.Date date = new java.util.Date();  //获取系统当前日期		
 		Record apply = new Record().set("created",date).set("state",1).set("migrantId",migrantId).set("stationId",stationId);				
 		Db. save("apply", apply);		
+	}
+	
+	//查找公司的其它岗位	
+	public List<Record> findOtherStation(Integer companyId){		
+		List<Record> otherStation=Db.find("select * from station where companyId='"+companyId+"'");
+		return otherStation;		
+	}
+	
+	//查找地区信息
+	public Record findArea(Integer id){
+		return Db.findById("t_prov_city_area_street", id);
+	}
+	
+	//查找父地区
+	public List<Record> findParentArea(Integer id){
+		return Db.find("select * from t_prov_city_area_street where code='"+id+"'");		
 	}
 }
