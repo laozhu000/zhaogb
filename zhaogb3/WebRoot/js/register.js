@@ -27,7 +27,8 @@ $(function() {
 			"name": "电子设备装接工"
 		}]   */   
 	var salaryId;     //薪资id
-	var sex ;   //性别
+	var sex ;         //性别
+	var num=0;       //判断是否发布过消息，发布之后才能到推荐岗位页面中去
 	var wages = [{
 						"salary": "1500以下"
 					}, {
@@ -171,6 +172,7 @@ $(function() {
 	            dataType:'text', //很重要!!!.预期服务器返回的数据类型   
 	            success:function(data){  
 	            	alert(data); //提示信息
+	            	num=1;       //用来判断是否发布信息过了
 	            },
 	            error:function(){   
 	                alert("error occured!!!");   
@@ -224,7 +226,12 @@ $(function() {
     
     //推荐岗位的点击事件，页面跳转到recommend.html
     $(".tuijian").click(function(){
-       window.location.href='recommend.html';
+    	if(num==0){           //还没发布消息
+        alert('请先注册！');
+    	}
+        else{    //已经注册过了，页面跳转到推荐岗位页面
+    		window.location.href='recommend.html';
+        }
     })
     
 	//验证手机号码格式

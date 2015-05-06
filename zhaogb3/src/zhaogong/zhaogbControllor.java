@@ -17,7 +17,7 @@ public class zhaogbControllor extends Controller {
 		renderText("welcome to zhaogongbao.");
 		//redirect("/reg.html");
 		//redirect("/zhaogb.html");
-		redirect("/register.html");
+		redirect("/introduce.html");
 		}
 	
 	//获取父职位名称

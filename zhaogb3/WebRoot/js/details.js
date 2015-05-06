@@ -142,16 +142,17 @@ $(function() {
 	}]
 	$(document).ready(function() {
 		
-		//getMigrantId(); //获取发布信息的用户id  测试时先注掉
+		getMigrantId(); //获取发布信息的用户id  测试时先注掉
 		
 		id = getUrlParam('id');  //获取url的id参数值		
 		getStation();//获取岗位详情
 		getCompany();//获取公司详情
 		if(stationInfor.areaId!=null){
-		getArea();//获取地区
+		getArea(stationInfor.areaId);//获取地区
 		getParentArea();//获取父地区
 		}
 		getOtherStation() //获取公司的其它岗位
+		
 		checkNull();  //判断岗位和公司信息是否为null
 		creat_job();  //显示岗位信息
 		creat_company()  //显示公司信息
@@ -180,6 +181,17 @@ $(function() {
 			//alert('hi');
 			applyItem();			
 		})
+		
+		//其它岗位的点击事件
+		$(".det-com.part-ul").on('click','li',function(){			
+			location.href='details.html?id='+$(this).attr('value')+'';
+	});
+
+		
+//		$(".icon.icon-left-nav.irec").click(function(){
+//			location.href="recommend.html";
+//		});
+
 	});
 	
 	function getMigrantId(){  //向后台获取发布信息的用户id
@@ -349,7 +361,8 @@ $(function() {
 	            data:applyInfor,   
 	            dataType:'text', //很重要!!!.      预期服务器返回的数据类型   
 	            success:function(data){ 
-	            	alert(data);	            	
+	            	alert(data);
+	            	location.href='recommend.html';//申请岗位成功，页面跳转到推荐岗位页面上
 	            },
 	            error:function(){   
 	                alert("error occured!!!");   
@@ -445,19 +458,37 @@ $(function() {
 	 }	 
 	 //该公司的其它岗位添加到页面中
 	 function creat_otherjob() {
+			var areaStr1="";//地区字符串
 			for (var j = 0; j < otherStation.length; j++) {
+				areaStr1="";
 				//alert("hi");
-				$(".det-com.part-ul").append("<li><div class='det-com part1-com1'>"+otherStation[j].name+"<span class='det-com part1-com'>"+wages[otherStation[j].salary-1].salary+"</span></div><div class='det-com part2-com1'>"+types[otherStation[j].type-1].type+"<span class='det-com part2-com'>"+otherStation[j].endTime+"</span></div></li>");
+				if(otherStation[j].id!=stationInfor.id){  //去掉之前的岗位
+				if(otherStation[j].areaId!=null){
+					getArea(otherStation[j].areaId);//获取地区
+					getParentArea();//获取父地区
+				}
+			
+				if(otherStation[j].areaId==null){
+					areaStr1="";
+					}
+				else if(areaInfor.level<2)
+					areaStr1=areaStr1+parentInfor[1].name+"|";
+				else if(areaInfor.level>=2){
+					areaStr1=areaStr1+parentInfor[1].name+"-"+parentInfor[2].name+"|";
+				}	
+				
+				$(".det-com.part-ul").append("<li value="+otherStation[j].id+"><div class='det-com part1-com1'>"+otherStation[j].name+"<span class='det-com part1-com'>"+wages[otherStation[j].salary-1].salary+"</span></div><div class='det-com part2-com1'>"+areaStr1+types[otherStation[j].type-1].type+"<span class='det-com part2-com'>"+otherStation[j].endTime+"</span></div></li>");
+			 }
 			}
 		}
 	 
 	 //根据areaId获取地区信息
-	 function getArea(){
+	 function getArea(areaId){
 		 $.ajax({
 			    async: false,
 			    type:'post',
 	            url:'/zhaogb/getArea',   
-	            data:{"id":stationInfor.areaId},   
+	            data:{"id":areaId},   
 	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
 	            success:function(data){ 
 	            	//alert(data);
