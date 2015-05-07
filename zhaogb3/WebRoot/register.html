@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>招工宝</title>
+		<title>Ratchet template page</title>
 
 		<!-- Sets initial viewport load and disables zooming  -->
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
@@ -11,16 +11,13 @@
 		<!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
 		<!-- Include the compiled Ratchet CSS -->
-		<link href="ratchet.css" rel="stylesheet">
+		<link href="dist/css/ratchet.css" rel="stylesheet">
 		<link rel="stylesheet" href="dist/css/ratchet-theme-ios.css" />
 		<link type="text/css" rel="stylesheet" href="css/main.css" />
 		<link rel="stylesheet" href="dist/css/ratchet.min.css" />
-		<link rel="stylesheet" href="css/docs.min.css">
 		<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 		<!-- Include the compiled Ratchet JS -->
-		<script type="text/javascript" src="dist/js/ratchet.js"></script>
 		<script type="text/javascript" src="js/register.js"></script>
 	</head>
 
@@ -48,7 +45,9 @@
 			<center>
 				<button class="btn-publish">发布信息</button>
 				<div>
-					<div class="tuijian"></div>
+					<a href="recommend.html">
+						<div class="tuijian"></div>
+					</a>
 					<div class="fujin"></div>
 				</div>
 			</center>
@@ -115,6 +114,19 @@
 						<li class="table-view-cell child">Item 2</li>
 					</ul>
 				</div>
+			</div>
+		</div>
+		<div class="select-age-bg"></div>
+		<div class="select-age">
+				<div class="select-age-title">年龄<span class="icon icon-close iage"></span></div>		
+				<ul class="table-view age">
+					<li class="table-view-cell sage" value='1'>18-25</li>
+					<li class="table-view-cell sage" value='2'>26-30</li>
+					<li class="table-view-cell sage" value='3'>31-35</li>
+					<li class="table-view-cell sage" value='4'>36-40</li>
+					<li class="table-view-cell sage" value='5'>41-45</li>
+					<li class="table-view-cell sage" value='6'>45以上</li>
+				</ul>
 			</div>
 		</div>
 	</body>

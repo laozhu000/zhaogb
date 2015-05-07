@@ -28,7 +28,8 @@ $(function() {
 		}]   */   
 	var salaryId;     //薪资id
 	var sex ;         //性别
-	var num=0;       //判断是否发布过消息，发布之后才能到推荐岗位页面中去
+	var age;     //年龄
+	//var num=0;       //判断是否发布过消息，发布之后才能到推荐岗位页面中去
 	var wages = [{
 						"salary": "1500以下"
 					}, {
@@ -82,14 +83,32 @@ $(function() {
 			});
 		});
 
-		//填写年龄
+		//点击年龄
 		$(".text-age").focus(function() {
 			$(".text-age").css("background-color", "#FFFFCC");
 		});
 		$(".text-age").blur(function() {
-			$(".text-age").css("background-color", "#F2F2F2");
+			$(".text-age").css("background-color", "#f5f5f5");
 		});
-		
+		$(".text-age").click(function(){
+			$(".select-age").show();
+			$(".select-age-bg").show();
+			$(".text-age").blur();	
+		});
+		//选择年龄
+		$(".table-view-cell.sage").click(function(){
+			var value=$(this).text();
+			age =$(this).attr('value');
+			$(".select-age").hide();
+			$(".select-age-bg").hide();
+			$(".text-age").val(value);
+		});
+		//点击关闭
+		$(".icon.icon-close.iage").click(function(){
+			$(".select-age").hide();
+			$(".select-age-bg").hide();
+		});
+
 		//选择期望工资
 		$(".text-salary").focus(function() {
 			$(".text-salary").css("background-color", "#FFFFCC");
@@ -137,10 +156,14 @@ $(function() {
 	   $(".icon.icon-left-nav").click(function(){
 	   	$(".father-ul").empty();
 	   	$(".child-ul").empty();
-	   	$(".select-job").hide();
-	   	
-	   	
+	   	$(".select-job").hide();	   	
 	   });
+	   
+	   //返回首页
+	   $(".image1").click(function(){
+			location.href="introduce.html";
+		});
+
 		//填写手机号
 		$(".text-phone").focus(function() {
 			$(".text-phone").css("background-color", "#FFFFCC");
@@ -156,14 +179,13 @@ $(function() {
 				"name":$(".text-name").val(),
 			   // "sex":$(".text_sex").val(),
 				"sex":sex,
-			    "age":$(".text-age").val(),
+			    "age":age,
 			    "salary":salaryId,
 			    "itemName":$(".text-job").val(),
 			    "phone":$(".text-phone").val()					
 			}
 			
-			//alert(user.itemName);
-			
+			//alert(user.itemName);			
 			$.ajax({ 
 				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 				type:'post',
@@ -172,7 +194,8 @@ $(function() {
 	            dataType:'text', //很重要!!!.预期服务器返回的数据类型   
 	            success:function(data){  
 	            	alert(data); //提示信息
-	            	num=1;       //用来判断是否发布信息过了
+	            	//num=1;       //用来判断是否发布信息过了
+	            	document.cookie="num="+1;	            	
 	            },
 	            error:function(){   
 	                alert("error occured!!!");   
@@ -226,12 +249,7 @@ $(function() {
     
     //推荐岗位的点击事件，页面跳转到recommend.html
     $(".tuijian").click(function(){
-    	if(num==0){           //还没发布消息
-        alert('请先注册！');
-    	}
-        else{    //已经注册过了，页面跳转到推荐岗位页面
-    		window.location.href='recommend.html';
-        }
+    		window.location.href='recommend.html';        
     })
     
 	//验证手机号码格式

@@ -1,3 +1,5 @@
+
+
 $(function() {
 	
 	var migrantId;   //发布信息的用户id
@@ -139,11 +141,11 @@ $(function() {
 		"weal": "高温补贴"
 	}, {
 		"weal": "餐补"
-	}]
+	}]   
+    //alert(num);
 	$(document).ready(function() {
-		
-		getMigrantId(); //获取发布信息的用户id  测试时先注掉
-		
+		//alert(num);
+		//getMigrantId(); //获取发布信息的用户id  测试时先注掉
 		id = getUrlParam('id');  //获取url的id参数值		
 		getStation();//获取岗位详情
 		getCompany();//获取公司详情
@@ -195,6 +197,7 @@ $(function() {
 	});
 	
 	function getMigrantId(){  //向后台获取发布信息的用户id
+		//alert("nini");
 		$.ajax({     
 			async: false,
 			type:'post',
@@ -202,6 +205,7 @@ $(function() {
             //data:{"id":id},   
             dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
             success:function(data){
+            		//alert('hi');
             	migrantId=data[data.length-1].id;               	  
             },
             error:function(){   
@@ -255,16 +259,29 @@ $(function() {
 	function creat_job() {
 		creat_weal(stationInfor.weal);  //构造岗位待遇字符串
 		var areaStr="";//地区字符串
-		if(stationInfor.areaId==null){
-			areaStr="";
-		}
-		else if(areaInfor.level<2)
-			areaStr=areaStr+parentInfor[1].name+"|";
-		else if(areaInfor.level>=2){
-			areaStr=areaStr+parentInfor[1].name+"-"+parentInfor[2].name+"|";
-		}
+//		if(stationInfor.areaId==null){     默认地区是详细的
+//			areaStr="";
+//		}
+//		else if(areaInfor.level<2)
+//			areaStr=areaStr+parentInfor[1].name+"|";
+//		else if(areaInfor.level>=2){
+//			areaStr=areaStr+parentInfor[1].name+"-"+parentInfor[2].name+"|";
+//		}
 		//alert(areaStr);
 		//alert(areaInfor.level);
+		
+		if(stationInfor.areaId==null){     //默认地区是详细的
+			areaStr="";
+		}
+		else if(parentInfor[1].name=="北京市"||parentInfor[1].name=="天津市"||parentInfor[1].name=="上海市"||parentInfor[1].name=="重庆市"){
+			//alert('hi');
+			areaStr=areaStr+parentInfor[1].name+"-"+parentInfor[3].name+"|";
+		}
+		else{
+			//alert('hihi');
+			areaStr=areaStr+parentInfor[1].name+"-"+parentInfor[2].name+"|";
+		}
+		
 		var html1 =
 			"<ul class='table-view'>" +
 			"<li class='table-view-cell det-li'>" +
@@ -350,15 +367,62 @@ $(function() {
 //	}
 	
 	//申请岗位，将申请信息放到apply表中
-	 function applyItem(){   
-		  var applyInfor={
+	 function applyItem(){ 
+		  var applyInfor;  //用户申请的岗位详情 
+		  var i;//临时变量
+		  var name="num";
+		  var temp=document.cookie.indexOf(name+"=");  //判断cookie是否为空
+		 if(temp==-1)
+			 alert("请先注册！");
+		 else{
+		  getMigrantId(); //获取发布信息的用户id  测试时先注掉
+		  
+//		  var apply={
+//				  "migrantId":migrantId,
+//				  "stationId":id
+//		  }		  
+		  //查询apply表，看是否是申请同一个岗位
+		  $.ajax({
+			    async: false,
+			    type:'post',
+	            url:'/zhaogb/getApply',   
+	            data:{"migrantId":migrantId},   
+	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+	            success:function(data){ 
+	            	applyInfor=data;
+	            },
+	            error:function(){   
+	                alert("error occured!!!");   
+	            }	         
+	         });
+		  
+		  if(applyInfor==null){
+			  saveApply();
+		  }
+		  else{
+		  for(i=0;i<applyInfor.length;i++){
+			  if(applyInfor[i].stationId==id){
+				  alert("您已经申请过该岗位，不要重复申请！");
+				 break;  
+			  }
+		  }		  
+		  if(i==applyInfor.length){   //没有申请相同岗位
+		    saveApply()
+		    }
+		  }
+		 }
+	  }
+	 
+	 //将申请岗位信息放到apply表中
+	 function saveApply(){
+		 var apply={
 				  "migrantId":migrantId,
 				  "stationId":id
-		  }
-		  $.ajax({ 
+		  }			 
+		 $.ajax({ 
 				type:'post',
 	            url:'/zhaogb/saveApply',   
-	            data:applyInfor,   
+	            data:apply,   
 	            dataType:'text', //很重要!!!.      预期服务器返回的数据类型   
 	            success:function(data){ 
 	            	alert(data);
@@ -368,8 +432,9 @@ $(function() {
 	                alert("error occured!!!");   
 	            }
 	         
-	         });		  
-	  }
+	         });	
+		 
+	 }
 	 
 	 //获取该公司的其它岗位信息
 	 function getOtherStation(){
@@ -466,16 +531,27 @@ $(function() {
 				if(otherStation[j].areaId!=null){
 					getArea(otherStation[j].areaId);//获取地区
 					getParentArea();//获取父地区
-				}
-			
-				if(otherStation[j].areaId==null){
+				}			
+				/*if(otherStation[j].areaId==null){   默认地区是具体的
 					areaStr1="";
 					}
 				else if(areaInfor.level<2)
 					areaStr1=areaStr1+parentInfor[1].name+"|";
 				else if(areaInfor.level>=2){
 					areaStr1=areaStr1+parentInfor[1].name+"-"+parentInfor[2].name+"|";
-				}	
+				}	*/
+				
+				if(otherStation[j].areaId==null){   //默认地区是具体的
+					areaStr1="";
+					}
+				else if(parentInfor[1].name=="北京市"||parentInfor[1].name=="天津市"||parentInfor[1].name=="上海市"||parentInfor[1].name=="重庆市"){
+					//alert('hi');
+					areaStr1=areaStr1+parentInfor[1].name+"-"+parentInfor[3].name+"|";
+				}
+				else{
+					//alert('hihi');
+					areaStr1=areaStr1+parentInfor[1].name+"-"+parentInfor[2].name+"|";
+				}
 				
 				$(".det-com.part-ul").append("<li value="+otherStation[j].id+"><div class='det-com part1-com1'>"+otherStation[j].name+"<span class='det-com part1-com'>"+wages[otherStation[j].salary-1].salary+"</span></div><div class='det-com part2-com1'>"+areaStr1+types[otherStation[j].type-1].type+"<span class='det-com part2-com'>"+otherStation[j].endTime+"</span></div></li>");
 			 }

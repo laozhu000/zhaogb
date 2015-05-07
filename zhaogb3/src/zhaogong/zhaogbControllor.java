@@ -117,4 +117,12 @@ public class zhaogbControllor extends Controller {
 		List<Record> parentArea=getModel(zhaogb.class).findParentArea(idInteger);
 		renderJson(parentArea);
 	}
+	
+	//根据migrantId获取申请岗位信息
+	public void getApply(){
+		Integer migrantId=getParaToInt("migrantId");
+		//System.out.println(migrantId);
+		List<Record> applyInforList=getModel(zhaogb.class).findApply(migrantId);
+		renderJson(applyInforList);		
+	}
 }

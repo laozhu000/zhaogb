@@ -106,4 +106,9 @@ public class zhaogb extends Model<zhaogb> {
 	public List<Record> findParentArea(Integer id){
 		return Db.find("select * from t_prov_city_area_street where code='"+id+"'");		
 	}
+	
+	public List<Record> findApply(Integer migrantId){
+		//System.out.println(migrantId);
+		return Db.find("select * from apply where migrantId='"+migrantId+"'");
+	}
 }

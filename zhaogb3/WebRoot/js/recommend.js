@@ -43,7 +43,7 @@ $(function() {
 		    "salary":0,
 		    "itemId":0			  //初值应为0	
 		}	
-	
+	//alert('hehe');
 	var wages = [{
 		"salary": "1500以下/月"
 	}, {
@@ -71,6 +71,8 @@ $(function() {
 	}]*/
 
 	$(document).ready(function() {
+		//alert('hehe');
+		
 		//creat_part();
 		getStation();  //加载岗位 ,ajax是异步的
 		//creat_tip(weals);
@@ -302,5 +304,5 @@ $(function() {
 				 companyInfor.address="";
 			 }
 		 }	
-    
+	       
 });

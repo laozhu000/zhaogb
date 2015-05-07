@@ -1,12 +1,15 @@
 @CHARSET "UTF-8";
 body {}
+a{
+	color:#000000;
+}
 /*introduce*/
 .introduce-part1{
 	font-size: 20px;
 	width: 80%;
 	height: 40px;
 	line-height: 40px;
-	margin-top: 40%;
+	margin-top: 60%;
 	text-align: center;
 	color: #000000;
 	background: #5bcf6c;
@@ -139,6 +142,35 @@ body {}
 .btn-select.check {
 	border-right: 1px solid #F2F2F2;
 }
+.table-view-cell.sage{
+	text-align: center;
+	padding:10px;
+	background-image:none ;
+	border-bottom: 1px solid #F2F2F2;
+}
+.select-age{
+	display: none;
+	position: absolute;
+	top: 20%;
+    left: 10%;
+    width: 80%;
+	background: #FFFFFF;
+	border: 2px solid #DDDDDD;
+}
+.select-age-title{
+	padding: 11px 0px 11px 20px;
+	text-align: center;
+	color: #787878;
+}
+.select-age-bg{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .5);
+}
 .select-pay {
 	display: none;
 	border: 2px solid #5bcf6c;
@@ -231,6 +263,26 @@ body {}
 .table-view.child-ul{
 	overflow-y:scroll ;
 }
+.popover-age{
+  position: fixed;
+  top: 104px;
+  left: 50%;
+  width: 280px;
+  margin-left: -140px;
+  background-color: #fff;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+  -webkit-transition: all .25s linear;
+  -moz-transition: all .25s linear;
+  transition: all .25s linear;
+  -webkit-transform: translate3d(0, -15px, 0);
+  -ms-transform: translate3d(0, -15px, 0);
+  transform: translate3d(0, -15px, 0);
+}
+.bar.bar-nav.age{
+	border:none;
+	}
 /*recommend*/
 .rec-top{
 	position: fixed;
@@ -437,6 +489,12 @@ body {}
 	display: inline-block;
 	float: right;
 	margin: 0px;
+}
+.icon.icon-close.iage{
+	display: inline-block;
+	float: right;
+	margin: 0px;
+	color: #ddd;
 }
 .title-job {
 	background: #fcdb00;
