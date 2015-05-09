@@ -206,7 +206,10 @@ $(function() {
             dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
             success:function(data){
             		//alert('hi');
-            	migrantId=data[data.length-1].id;               	  
+            	//migrantId=data[data.length-1].id;   
+            	//alert(data.id);
+            	migrantId=data.id;
+            	//alert(migrantId);
             },
             error:function(){   
                 alert("error occured!!!");   
@@ -370,18 +373,30 @@ $(function() {
 	 function applyItem(){ 
 		  var applyInfor;  //用户申请的岗位详情 
 		  var i;//临时变量
-		  var name="num";
-		  var temp=document.cookie.indexOf(name+"=");  //判断cookie是否为空
-		 if(temp==-1)
-			 alert("请先注册！");
-		 else{
-		  getMigrantId(); //获取发布信息的用户id  测试时先注掉
+		  var name="id";
+		  //var cookieId;
+		  //var temp=document.cookie.indexOf(name+"=");  //判断cookie是否为空
+//		 if(temp==-1)        //cookie为空，说明用户没注册
+//			 alert("请先注册！");
+//		 else{                  //cookie不为空，用户已经注册过了
+//			 //alert('hi');
+//			 cookieId=document.cookie.split("=");  //获取cookie的id值
+//			 if(cookieId[0]==name){
+//			 migrantId=cookieId[1]; 
+//			 //alert(migrantId);
+//			 }
+			 //getMigrantId(); //获取发布信息的用户id  测试时先注掉
 		  
 //		  var apply={
 //				  "migrantId":migrantId,
 //				  "stationId":id
 //		  }		  
+		  getMigrantId();
 		  //查询apply表，看是否是申请同一个岗位
+		  if(migrantId==null){
+			  alert('请先注册');
+		  }
+		  else{
 		  $.ajax({
 			    async: false,
 			    type:'post',
@@ -409,9 +424,10 @@ $(function() {
 		  if(i==applyInfor.length){   //没有申请相同岗位
 		    saveApply()
 		    }
+		   }
 		  }
 		 }
-	  }
+	  //}
 	 
 	 //将申请岗位信息放到apply表中
 	 function saveApply(){

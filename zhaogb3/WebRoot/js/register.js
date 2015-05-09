@@ -195,7 +195,8 @@ $(function() {
 	            success:function(data){  
 	            	alert(data); //提示信息
 	            	//num=1;       //用来判断是否发布信息过了
-	            	document.cookie="num="+1;	            	
+	            	//alert(data.id);
+	            	//document.cookie="id="+data.id;	            	
 	            },
 	            error:function(){   
 	                alert("error occured!!!");   

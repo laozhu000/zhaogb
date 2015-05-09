@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 import org.omg.CORBA.PUBLIC_MEMBER;
 
@@ -34,7 +35,7 @@ public class zhaogb extends Model<zhaogb> {
 	}
 	
 	//存储用户信息到migrant中,并返回用户的id,用于申请岗位时用
-	public List<Record> saveUserMessage(java.util.Date date,String name,Integer sex,Integer age,Integer salary,String itemName,String phone){
+	public Integer saveUserMessage(java.util.Date date,String name,Integer sex,Integer age,Integer salary,String itemName,String phone){
 		List<Record> itemIdList=Db.find("select id from item where name='"+itemName+"'");
 		Record itemIdRecord=itemIdList.get(0);  //获取职业的id对象
 		Integer itemId = itemIdRecord.getInt("id"); //获取职业的id
@@ -42,9 +43,15 @@ public class zhaogb extends Model<zhaogb> {
 				.set("age", age).set("salary", salary).set("itemId", itemId).set("phone",phone);
 		Db. save("migrant", user);
 		
+		//查询最大migrant表的id以获取注册用户的信息
+		Record id=Db.findFirst("select max(id) as id from migrant");
+		//Record idRecord=id.get(0);
+		Integer idInteger=id.getInt("id");
+		//System.out.println(idInteger);
 		//查询刚发布信息用户的id
-		List<Record> migrantIdList=Db.find("select * from migrant");  //sql语句，待优化，不必查询所有的项
-		return migrantIdList;
+		//List<Record> migrantIdList=Db.find("select * from migrant where id='"+idInteger+"'");  //查询刚注册用户的信息
+		//System.out.println(migrantIdList);
+		return idInteger;
 	}
 	
 	//根据salary和item查找合适的工作

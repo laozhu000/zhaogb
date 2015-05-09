@@ -5,6 +5,13 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+
+
+import javax.servlet.http.HttpSession;
+
+//import org.apache.jasper.compiler.Node.VariableDirective;
+import org.eclipse.jetty.util.ajax.JSON;
+
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Record;
 import com.sun.el.lang.FunctionMapperImpl.Function;
@@ -12,7 +19,8 @@ import com.sun.el.lang.FunctionMapperImpl.Function;
 import zhaogong.zhaogb;
 
 public class zhaogbControllor extends Controller {
-	public static List<Record> migrant=null;   //用户注册信息，便于使用注册用户id
+	//public static List<Record> migrant=null;   //用户注册信息，便于使用注册用户id
+	//public HttpSession session=new HttpSession();
 	public void index() { 
 		renderText("welcome to zhaogongbao.");
 		//redirect("/reg.html");
@@ -37,6 +45,7 @@ public class zhaogbControllor extends Controller {
 	
 	//存储用户信息
 	public void saveMessage(){
+		Integer idInteger;
 		java.util.Date date = new java.util.Date();  //获取系统当前日期
 		//System.out.println(date);
 		String name=getPara("name");
@@ -46,8 +55,14 @@ public class zhaogbControllor extends Controller {
 		String itemName=getPara("itemName");
 		String phone=getPara("phone");
 		//在用户发布时，查询出用户注册信息，通过migrant[migrant.length-1].id得到注册用户的id
-	    migrant=getModel(zhaogb.class).saveUserMessage(date,name,sex,age,salary,itemName,phone);
+		idInteger=getModel(zhaogb.class).saveUserMessage(date,name,sex,age,salary,itemName,phone);
 		//setAttr("migrantId",migrant);
+	    getRequest().getSession().setAttribute("migrantId",idInteger);
+		//setSessionAttr("migrantId", idInteger);
+	    //getRequest().getSession().getAttribute(arg0);
+	    //System.out.println(migrant.get(0).getStr("id"));
+		//JSON idJson={"id":idInteger,"nsme":"ds"};
+	    //renderJson("{\"id\":"+idInteger+"}");
 		renderText("发布信息成功");	
 		
 	}
@@ -94,7 +109,10 @@ public class zhaogbControllor extends Controller {
 	//获取注册的用户id
 	public void getMigrantId() {
 		//将用户发布信息时得到的全局变量migrant渲染到岗位详情页面
-		renderJson(migrant);		//将setAttr的migrantId渲染到前台		
+		//renderJson(migrant);		//将setAttr的migrantId渲染到前台		
+		Integer id=(Integer)getRequest().getSession().getAttribute("migrantId");
+		//Integer id=getSessionAttr("migrantId");
+		renderJson("{\"id\":"+id+"}");
 	}
 	
 	//根据公司id获取该公司的其它岗位
