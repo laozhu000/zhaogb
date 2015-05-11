@@ -7,10 +7,17 @@ import java.util.List;
 
 
 
+
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
+
+
+
 
 //import org.apache.jasper.compiler.Node.VariableDirective;
 import org.eclipse.jetty.util.ajax.JSON;
+
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Record;
@@ -57,12 +64,18 @@ public class zhaogbControllor extends Controller {
 		//在用户发布时，查询出用户注册信息，通过migrant[migrant.length-1].id得到注册用户的id
 		idInteger=getModel(zhaogb.class).saveUserMessage(date,name,sex,age,salary,itemName,phone);
 		//setAttr("migrantId",migrant);
-	    getRequest().getSession().setAttribute("migrantId",idInteger);
+	    getRequest().getSession().setAttribute("migrantId",idInteger);//设置migrantId为session
 		//setSessionAttr("migrantId", idInteger);
 	    //getRequest().getSession().getAttribute(arg0);
 	    //System.out.println(migrant.get(0).getStr("id"));
 		//JSON idJson={"id":idInteger,"nsme":"ds"};
 	    //renderJson("{\"id\":"+idInteger+"}");
+		//Object migrantIdObject={"id":idInteger};
+		
+		//Record recordMigrantId=new Record();
+		//recordMigrantId.set("id",idInteger);
+        
+		
 		renderText("发布信息成功");	
 		
 	}
@@ -110,9 +123,13 @@ public class zhaogbControllor extends Controller {
 	public void getMigrantId() {
 		//将用户发布信息时得到的全局变量migrant渲染到岗位详情页面
 		//renderJson(migrant);		//将setAttr的migrantId渲染到前台		
-		Integer id=(Integer)getRequest().getSession().getAttribute("migrantId");
+		Integer id=(Integer)getRequest().getSession().getAttribute("migrantId");//获取session 中的migrantId
 		//Integer id=getSessionAttr("migrantId");
+		//Map<String, Object> record = (Map<String, Object>) SessionUser.getUser(getRequest());//获取session
+		//Record record=new Record();
+		//record=(Record)SessionUser.getUser(getRequest());
 		renderJson("{\"id\":"+id+"}");
+		//renderJson(record);
 	}
 	
 	//根据公司id获取该公司的其它岗位

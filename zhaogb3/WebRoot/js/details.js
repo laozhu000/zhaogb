@@ -330,8 +330,7 @@ $(function() {
 				"<ul class='table-view'>" +
 				"<li class='table-view-cell det-com'>" +
 				"<div class='det-companys part1'>" + companyInfor.name + "</div>" +
-				"<div class='det-companys part2'>" + companyInfor.address + "" +
-				"<img src='img/img5.png' height='16px' width='14px'>查看地图</div></li>" +
+				"<div class='det-companys part2'>" + companyInfor.address + "" +"</div></li>" +
 				"	<li class='table-view-cell det-com'>" +
 				"	<ul class='table-view det-ba'>" +
 				"<li class='table-view-cell det-ba'>基本信息</li>" +
@@ -442,7 +441,7 @@ $(function() {
 	            dataType:'text', //很重要!!!.      预期服务器返回的数据类型   
 	            success:function(data){ 
 	            	alert(data);
-	            	location.href='recommend.html';//申请岗位成功，页面跳转到推荐岗位页面上
+	            	//location.href='recommend.html';//申请岗位成功，页面跳转到推荐岗位页面上
 	            },
 	            error:function(){   
 	                alert("error occured!!!");   

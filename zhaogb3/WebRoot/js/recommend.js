@@ -39,6 +39,8 @@ $(function() {
 	var station;     //岗位情况
 	var wealString=""; //公司福利
 	var num=0;    //岗位下标
+	var migrantId;  //注册用户id
+	var stationId;  //岗位id
 	var condition={   //条件，为0表示没选该条件
 		    "salary":0,
 		    "itemId":0			  //初值应为0	
@@ -92,16 +94,17 @@ $(function() {
 			condition.salary=$(this).attr('value');	
 			//alert(condition.salary);
 			//alert(condition.salary);
+			//alert(condition.salary);
 			//$(".page_infor li").empty();
 			getStation();  //刷新岗位页面
 			
 		});
 		//点击职位弹出框
 		$(".t.rec-job").click(function() {
-			$(".recommend").hide();
 			$(".salary-bg").hide();
 			$(".popover-salary").hide();
 			$(".rec-top").hide();
+			$(".items").hide();
 			$(".recommend-job").show();
 			$(".table-view.job-father-ul").empty();
 			getFatherItem();
@@ -112,6 +115,7 @@ $(function() {
 		$(".icon.icon-close.ijob").click(function() {
 			$(".recommend-job").hide();
 			$(".rec-top").show();
+			$(".items").show();
 		});
 		
 		//父职业的点击事件，生成子职业列表
@@ -132,6 +136,30 @@ $(function() {
 			//alert(condition.itemId);			
 			getStation();  //刷新岗位页面
 		});
+//		$(".rec-ul").on('click',$(".rec-ul li"),function(){
+//			alert('hi');
+//			location.href="details.html";
+//		});
+		
+		
+//		$(".items").on('click','li.itemsli',function(){
+//			//alert('hi');
+//			num=$(this).attr('value');
+//			//alert(num);
+//			location.href='details.html?id='+station[num].id+'';			
+//		})
+            
+	});
+	
+	//为岗位信息绑定click事件
+	$(document).on('click','.rec-ul',function(){
+		//alert('hi');
+		//console.log($(this))
+		//$('.rec-ul').addClass('on');
+		num=$(this).attr("value");
+		//num=$(this).getAttribute('value');
+		//alert(num);
+		location.href='details.html?id='+station[num].id+'';
 	});
 	
 	//获取岗位
@@ -231,7 +259,7 @@ $(function() {
 				getCompany(station[i].companyId);  //根据companyId获取公司信息  
 				checkNull(i);
 				var html = "<div class='rec-part'>" +
-					"<ul class='rec-ul'>" +
+					"<ul class='rec-ul' value="+i+">" +
 					"<li class='table-view-cell span1'>" +
 					"<div class='part p1'>" + station[i].name + "" +
 					"<span class='s'>" + wages[station[i].salary - 1].salary + "</span></div></li>" +
@@ -242,14 +270,12 @@ $(function() {
 					"</ul></li>" +
 					"<li class='table-view-cell'>" +
 					"<img src='img/img5.png' height='17px' width='14px' class='image5'>" +
-					"	<div class='part p4'>" + companyInfor.address + "</div></li>" +
-					"<li class='table-view-cell span2'>" +
+					"	<div class='part p4'>" + companyInfor.address + "</div></li></ul>" +
+					"<ul class='rec-ul2'><li class='table-view-cell span2'>" +
 					"	<div class='part p5'>已申请<span class='number'>20人</span></div>" +
 					"	<div class='part pt5'>评论<span class='number'>7条</span></div>" +
 					"<div class='btn-ne'><a href='javascript:;' value="+i+">申请岗位</a></div></li></ul>";
-				$(".items").append("<li>" + html + "</li>");
-				//$(".weals-ul").empty();
-				//creat_tip(station[i].weal);
+				$(".items").append("<li class='itemsli'>" + html + "</li>");
 			}
 		}
 	
@@ -286,9 +312,127 @@ $(function() {
 	   $(document).on('click','a',function(){   //为document 的a href 绑定click事件
 	     num=$(this).attr('value');   //num为申请岗位的id
 	    // showStationInfor();
-	     window.location.href='details.html?id='+station[num].id+'';	
-    })
+	     //getMigrantId();
+	     stationId=station[num].id;
+	     applyItem();  //申请岗位
+	     //window.location.href='details.html?id='+station[num].id+'';	
+	     
+    })    
     
+    //点击 岗位信息时，跳转到岗位详情页面
+//    $(".rec-ul").on('click','li',function(){
+//    	    alert('hi');
+//			location.href="details.html";
+//		});
+  
+    
+    //获取注册用户id
+    function getMigrantId(){  //向后台获取发布信息的用户id
+			//alert("nini");
+			$.ajax({     
+				async: false,
+				type:'post',
+	            url:'/zhaogb/getMigrantId',   
+	            //data:{"id":id},   
+	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+	            success:function(data){
+	            		//alert('hi');
+	            	//migrantId=data[data.length-1].id;   
+	            	//alert(data.id);
+	            	migrantId=data.id;
+	            	//alert(migrantId);
+	            },
+	            error:function(){   
+	                alert("error occured!!!");   
+	            }
+	         
+	         });		
+		}
+    
+	   
+	 //申请岗位，将申请信息放到apply表中
+		 function applyItem(){ 
+			  var applyInfor;  //用户申请的岗位详情 
+			  var i;//临时变量
+			  var name="id";
+			  //var cookieId;
+			  //var temp=document.cookie.indexOf(name+"=");  //判断cookie是否为空
+//			 if(temp==-1)        //cookie为空，说明用户没注册
+//				 alert("请先注册！");
+//			 else{                  //cookie不为空，用户已经注册过了
+//				 //alert('hi');
+//				 cookieId=document.cookie.split("=");  //获取cookie的id值
+//				 if(cookieId[0]==name){
+//				 migrantId=cookieId[1]; 
+//				 //alert(migrantId);
+//				 }
+				 //getMigrantId(); //获取发布信息的用户id  测试时先注掉
+			  
+//			  var apply={
+//					  "migrantId":migrantId,
+//					  "stationId":id
+//			  }		  
+			  getMigrantId();
+			  //查询apply表，看是否是申请同一个岗位
+			  if(migrantId==null){
+				  alert('请先注册');
+			  }
+			  else{
+			  $.ajax({
+				    async: false,
+				    type:'post',
+		            url:'/zhaogb/getApply',   
+		            data:{"migrantId":migrantId},   
+		            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+		            success:function(data){ 
+		            	applyInfor=data;
+		            },
+		            error:function(){   
+		                alert("error occured!!!");   
+		            }	         
+		         });
+			  
+			  if(applyInfor==null){
+				  saveApply();
+			  }
+			  else{
+			  for(i=0;i<applyInfor.length;i++){
+				  if(applyInfor[i].stationId==stationId){
+					  alert("您已经申请过该岗位，不要重复申请！");
+					 break;  
+				  }
+			  }		  
+			  if(i==applyInfor.length){   //没有申请相同岗位
+			    saveApply()
+			    }
+			   }
+			  }
+			 }
+		  //}
+		 
+		 //将申请岗位信息放到apply表中
+		 function saveApply(){
+			 var apply={
+					  "migrantId":migrantId,
+					  "stationId":stationId
+			  }			 
+			 $.ajax({ 
+					type:'post',
+		            url:'/zhaogb/saveApply',   
+		            data:apply,   
+		            dataType:'text', //很重要!!!.      预期服务器返回的数据类型   
+		            success:function(data){ 
+		            	alert(data);
+		            	location.href='recommend.html';//申请岗位成功，页面跳转到推荐岗位页面上
+		            },
+		            error:function(){   
+		                alert("error occured!!!");   
+		            }
+		         
+		         });	
+			 
+		 }
+		 
     
     function checkNull(number){   //判断岗位和公司相关信息是否为null
 			 if(station[number].name==null){
