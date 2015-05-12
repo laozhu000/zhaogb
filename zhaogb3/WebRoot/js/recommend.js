@@ -129,8 +129,8 @@ $(function() {
 		
 		//子职业的点击事件
 		$(".table-view.job-child-ul").on('click', 'li', function() {
-			$(".recommend").show();
-			$(".rec-top").show();
+			$(".rec-top").show();			
+			$(".items").show();
 			$(".recommend-job").hide();
 			condition.itemId=$(this).attr('value');
 			//alert(condition.itemId);			

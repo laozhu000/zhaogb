@@ -260,7 +260,7 @@ $(function() {
 		//$("#moileMsg").html("<font color='red'>手机号码不能为空！</font>"); 
 		$(".text-phone").focus(); 
 		} 
-		else if(!($(".text-phone").val().match(/^(((13[0-9]{1})|(18[0-9]{1})|159|153)+\d{8})$/))) { 
+		else if(!($(".text-phone").val().match(/^(((13[0-9]{1})|(18[0-9]{1})|(15[0-9]{1}))+\d{8})$/))) { 
 		//else if(!$(".text_phone").val().match(/^[1][3][0-9]{9}$/)){
 		alert("手机号码格式不正确！");
 		$(".text-phone").val("");

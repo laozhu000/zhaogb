@@ -309,9 +309,9 @@ $(function() {
 			"	</div>" +
 			"<div class='table-view-cell det-infor p1'>学历:<span>" + educations[stationInfor.education - 1].education + "</span></div></li>" +
 			"	<li class='table-view-cell det-infor area'>" +
-			"	<div class='det-infor ex'>工作地点:<span>工业园区</span></div>" +
-			"	<div class='image6'>" +
-			"<img src='img/img6.png' height='16px' width='14px'>查看地图</div></li>" +
+			"	<div class='det-infor ex'>工作地点:<span>工业园区</span></div></li>" +
+			//"	<div class='image6'>" +
+			//"<img src='img/img6.png' height='16px' width='14px'>查看地图</div></li>" +
 			"	<li class='table-view-cell det-infor'>" +
 			"	<div>工作班次:<span>" + workShift[stationInfor.workShift - 1].workShift + "</span></div></li></ul></div>" +
 			"	<div class='details-des'>" +
