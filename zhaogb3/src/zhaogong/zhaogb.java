@@ -15,10 +15,10 @@ import com.jfinal.plugin.activerecord.Record;
 
 public class zhaogb extends Model<zhaogb> {
 	public static final zhaogb dao = new zhaogb();
-	
 	//查找fatherId为0的职位名称 
 	public List<Record> findItem(){	
 		List<Record> items=Db.find("select * from item where fatherId=0");
+		//Db.paginate(pageNumber, pageSize, select, sqlExceptSelect)  //分页查询		
 		return items;
 	}
 	

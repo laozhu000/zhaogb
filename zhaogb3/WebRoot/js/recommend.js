@@ -328,25 +328,28 @@ $(function() {
     
     //获取注册用户id
     function getMigrantId(){  //向后台获取发布信息的用户id
+		   
+		   migrantId=$.session.get('migrantId');
+		  //alert(migrantId);
 			//alert("nini");
-			$.ajax({     
-				async: false,
-				type:'post',
-	            url:'/zhaogb/getMigrantId',   
-	            //data:{"id":id},   
-	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
-	            success:function(data){
-	            		//alert('hi');
-	            	//migrantId=data[data.length-1].id;   
-	            	//alert(data.id);
-	            	migrantId=data.id;
-	            	//alert(migrantId);
-	            },
-	            error:function(){   
-	                alert("error occured!!!");   
-	            }
-	         
-	         });		
+//			$.ajax({     
+//				async: false,
+//				type:'post',
+//	            url:'/zhaogb/getMigrantId',   
+//	            //data:{"id":id},   
+//	            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+//	            success:function(data){
+//	            		//alert('hi');
+//	            	//migrantId=data[data.length-1].id;   
+//	            	//alert(data.id);
+//	            	migrantId=data.id;
+//	            	//alert(migrantId);
+//	            },
+//	            error:function(){   
+//	                alert("error occured!!!");   
+//	            }
+//	         
+//	         });		
 		}
     
 	   

@@ -191,9 +191,14 @@ $(function() {
 				type:'post',
 	            url:'/zhaogb/saveMessage',   
 	            data:user,   
-	            dataType:'text', //很重要!!!.预期服务器返回的数据类型   
+	            dataType:'json', //很重要!!!.预期服务器返回的数据类型   
 	            success:function(data){  
-	            	alert(data); //提示信息
+	            	alert('发布信息成功');
+	            	$.session.set('migrantId',data.id);
+	            	//alert(data.id);
+	            	//var c=;
+	            	//alert($.session.get('migrantId'));
+	            	//alert(data); //提示信息
 	            	//num=1;       //用来判断是否发布信息过了
 	            	//alert(data.id);
 	            	//document.cookie="id="+data.id;	            	
@@ -250,7 +255,7 @@ $(function() {
     
     //推荐岗位的点击事件，页面跳转到recommend.html
     $(".tuijian").click(function(){
-    		window.location.href='recommend.html';        
+    		window.location.href=response.encodeURL('recommend.html');        
     })
     
 	//验证手机号码格式

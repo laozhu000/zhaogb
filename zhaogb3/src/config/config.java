@@ -14,12 +14,13 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 
 public class config extends JFinalConfig {
 	
-	public static String jdbcUrl="jdbc:mysql://localhost:3306/zhaogongbao";
-	public static String user="root";
-	public static String password="930926";
+//	public static String jdbcUrl="jdbc:mysql://localhost:3306/zhaogongbao";
+//	public static String user="root";
+//	public static String password="930926";
 	
 	public void configConstant(Constants me) {
-	   me.setDevMode(true);
+		loadPropertyFile("a_little_config.txt");
+		me.setDevMode(true);
 		}
 	//配置路由
 	public void configRoute(Routes me) {
@@ -28,7 +29,7 @@ public class config extends JFinalConfig {
    //连接数据库
 	public void configPlugin(Plugins me) {
 		// 配置C3p0数据库连接池插件
-		C3p0Plugin c3p0Plugin = new C3p0Plugin(jdbcUrl, user, password.trim());
+		C3p0Plugin c3p0Plugin = new C3p0Plugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
 		me.add(c3p0Plugin);
 				
 		// 配置ActiveRecord插件

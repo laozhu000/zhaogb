@@ -1,0 +1,4 @@
+jdbcUrl = jdbc:mysql://localhost:3306/zhaogongbao
+user = root
+password =930926
+devMode = true

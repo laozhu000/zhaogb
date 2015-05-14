@@ -7,7 +7,7 @@ $(function() {
 	var otherStation;//该公司的其它岗位
 	var companyInfor;//公司信息
 	var areaInfor;   //地区信息
-	var parentInfor=new Array(5);//父地区
+	var parentInfor=new Array(5);//父地区  ,注：所有的岗位都用parentInfor数组,如果地区格式具体的话，不会有冲突
 	var id;          //岗位的id
 	var wealString="";  //公司待遇
 	
@@ -198,24 +198,25 @@ $(function() {
 	
 	function getMigrantId(){  //向后台获取发布信息的用户id
 		//alert("nini");
-		$.ajax({     
-			async: false,
-			type:'post',
-            url:'/zhaogb/getMigrantId',   
-            //data:{"id":id},   
-            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
-            success:function(data){
-            		//alert('hi');
-            	//migrantId=data[data.length-1].id;   
-            	//alert(data.id);
-            	migrantId=data.id;
-            	//alert(migrantId);
-            },
-            error:function(){   
-                alert("error occured!!!");   
-            }
-         
-         });		
+	   migrantId=$.session.get('migrantId');
+//		$.ajax({     
+//			async: false,
+//			type:'post',
+//            url:'/zhaogb/getMigrantId',   
+//            //data:{"id":id},   
+//            dataType:'json', //很重要!!!.      预期服务器返回的数据类型   
+//            success:function(data){
+//            		//alert('hi');
+//            	//migrantId=data[data.length-1].id;   
+//            	//alert(data.id);
+//            	migrantId=data.id;
+//            	//alert(migrantId);
+//            },
+//            error:function(){   
+//                alert("error occured!!!");   
+//            }
+//         
+//         });		
 	}
 	
 	

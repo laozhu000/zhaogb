@@ -64,19 +64,19 @@ public class zhaogbControllor extends Controller {
 		//在用户发布时，查询出用户注册信息，通过migrant[migrant.length-1].id得到注册用户的id
 		idInteger=getModel(zhaogb.class).saveUserMessage(date,name,sex,age,salary,itemName,phone);
 		//setAttr("migrantId",migrant);
-	    getRequest().getSession().setAttribute("migrantId",idInteger);//设置migrantId为session
+	   // getRequest().getSession().setAttribute("migrantId",idInteger);//设置migrantId为session
 		//setSessionAttr("migrantId", idInteger);
 	    //getRequest().getSession().getAttribute(arg0);
 	    //System.out.println(migrant.get(0).getStr("id"));
 		//JSON idJson={"id":idInteger,"nsme":"ds"};
-	    //renderJson("{\"id\":"+idInteger+"}");
+	    renderJson("{\"id\":"+idInteger+"}");
 		//Object migrantIdObject={"id":idInteger};
 		
 		//Record recordMigrantId=new Record();
 		//recordMigrantId.set("id",idInteger);
         
 		
-		renderText("发布信息成功");	
+		//renderText("发布信息成功");	
 		
 	}
 	
